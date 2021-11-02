@@ -11,6 +11,7 @@ use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
+use Sylius\RefundPlugin\Converter\RefundUnitsConverterInterface;
 use Sylius\RefundPlugin\Calculator\UnitRefundTotalCalculatorInterface;
 use Sylius\RefundPlugin\Command\RefundUnits;
 use Sylius\RefundPlugin\Entity\RefundPaymentInterface;
@@ -28,6 +29,9 @@ final class RefundPaymentHandler implements RefundPaymentHandlerInterface
     /** @var RemainingTotalProviderInterface */
     private $remainingTotalProvider;
 
+    /** @var RefundUnitsConverterInterface */
+    private $refundUnitsConverter;
+
     /** @var UnitRefundTotalCalculatorInterface */
     private $unitRefundTotalCalculator;
 
@@ -38,15 +42,17 @@ final class RefundPaymentHandler implements RefundPaymentHandlerInterface
     private $refundPaymentCompletedStateApplier;
 
     public function __construct(
-        UnitRefundTotalCalculatorInterface $unitRefundTotalCalculator,
+        RefundUnitsConverterInterface $refundUnitsConverter,
         RemainingTotalProviderInterface $remainingTotalProvider,
         ObjectRepository $refundPaymentInterface,
-        RefundPaymentCompletedStateApplierInterface $refundPaymentCompletedStateApplier
+        RefundPaymentCompletedStateApplierInterface $refundPaymentCompletedStateApplier,
+        UnitRefundTotalCalculatorInterface $unitRefundTotalCalculator
     ) {
-        $this->unitRefundTotalCalculator = $unitRefundTotalCalculator;
+        $this->refundUnitsConverter = $refundUnitsConverter;
         $this->remainingTotalProvider = $remainingTotalProvider;
         $this->refundPaymentRepository = $refundPaymentInterface;
         $this->refundPaymentCompletedStateApplier = $refundPaymentCompletedStateApplier;
+        $this->unitRefundTotalCalculator = $unitRefundTotalCalculator;
     }
 
     public function handle(Refund $refund, PaymentInterface $payment): RefundUnits

@@ -13,7 +13,7 @@ use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
 use Sylius\Component\Payment\Repository\PaymentMethodRepositoryInterface;
-use Sylius\RefundPlugin\Calculator\UnitRefundTotalCalculatorInterface;
+use Sylius\RefundPlugin\Converter\RefundUnitsConverterInterface;
 use Sylius\RefundPlugin\Command\RefundUnits;
 use Sylius\RefundPlugin\Creator\RefundUnitsCommandCreatorInterface;
 use Sylius\RefundPlugin\Exception\InvalidRefundAmount;
@@ -28,8 +28,8 @@ class RefundUnitsCommandCreatorDecorator implements RefundUnitsCommandCreatorInt
     /** @var RefundUnitsCommandCreatorInterface */
     private $decorated;
 
-    /** @var UnitRefundTotalCalculatorInterface */
-    private $unitRefundTotalCalculator;
+    /** @var RefundUnitsConverterInterface */
+    private $refundUnitsConverter;
 
     /** @var PaymentMethodRepositoryInterface */
     private $paymentMethodRepository;
@@ -45,13 +45,13 @@ class RefundUnitsCommandCreatorDecorator implements RefundUnitsCommandCreatorInt
 
     public function __construct(
         RefundUnitsCommandCreatorInterface $decorated,
-        UnitRefundTotalCalculatorInterface $unitRefundTotalCalculator,
+        RefundUnitsConverterInterface $refundUnitsConverter,
         PaymentMethodRepositoryInterface $paymentMethodRepository,
         OrderRepositoryInterface $orderRepository,
         TranslatorInterface $translator,
         PayPlugApiClientInterface $oneyClient
     ) {
-        $this->unitRefundTotalCalculator = $unitRefundTotalCalculator;
+        $this->refundUnitsConverter = $refundUnitsConverter;
         $this->decorated = $decorated;
         $this->paymentMethodRepository = $paymentMethodRepository;
         $this->orderRepository = $orderRepository;

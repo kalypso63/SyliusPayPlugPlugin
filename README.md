@@ -38,7 +38,7 @@ In local environment, the plugin will not work properly because you will not be 
     ```yaml
     framework:
         messenger:
-            default_bus: sylius_refund_plugin.command_bus
+            default_bus: sylius.command_bus
     ```
 
 2. As this plugin has a dependency to [**sylius/refund-plugin**](https://packagist.org/packages/sylius/refund-plugin) which does not yet have a stable release, configure your project to accept release candidate version.
